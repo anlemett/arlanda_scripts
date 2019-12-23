@@ -63,7 +63,7 @@ def get_tracks_inside_TMA(month, tracks_df, is_m1):
         
     TMA_flight_num = len(tracks_inside_TMA_df.groupby(level='flightId'))
     print("TMA flight number: ", TMA_flight_num)
-    #tracks_inside_TMA_df.to_csv(filename, sep=' ', encoding='utf-8', float_format='%.6f', header=None)
+    tracks_inside_TMA_df.to_csv(filename, sep=' ', encoding='utf-8', float_format='%.6f', header=None)
 
 
 def get_entry_point_index(flight_id, flight_id_group):
@@ -92,17 +92,16 @@ def check_TMA_contains_point(point):
 import time
 time_start = time.time()
 
-#months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-months = ['04']
+months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 
-#for month in months:
+for month in months:
     
-#    all_tracks_m1_df = get_all_tracks(month, True)
-#    get_tracks_inside_TMA(month, all_tracks_m1_df, True)
+    all_tracks_m1_df = get_all_tracks(month, True)
+    get_tracks_inside_TMA(month, all_tracks_m1_df, True)
     
-#    print("m1", month)
+    print("m1", month)
 
-#print((time.time()-time_start)/60)
+print((time.time()-time_start)/60)
 
 
 for month in months:

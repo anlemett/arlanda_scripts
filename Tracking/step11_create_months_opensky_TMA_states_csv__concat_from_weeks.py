@@ -8,7 +8,7 @@ start_time = time.time()
 year = '2018'
 DATA_DIR = os.path.join("data", "states_TMA_opensky_merged_with_ddr_m3_" + year)
 
-months = ['02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 
 for month in months:
     print(month)

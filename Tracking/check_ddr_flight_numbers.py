@@ -29,7 +29,7 @@ def get_enroute_tracks_year(is_m1):
     
 
     flightIdList = df.flightId.unique()
-    print(flightIdList)
+    #print(flightIdList)
     
     df = pd.DataFrame()
     
@@ -55,7 +55,7 @@ def get_tma_tracks_year(is_m1):
                     
     
     flightIdList = df.flightId.unique()
-    print(flightIdList)
+    #print(flightIdList)
     
     df = pd.DataFrame()
     
@@ -65,6 +65,7 @@ def get_tma_tracks_year(is_m1):
     
 import time
 time_start = time.time()
+
 
 enrouteFlightIdList = get_enroute_tracks_year(True)
 TMAFlightIdList = get_tma_tracks_year(True)

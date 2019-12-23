@@ -37,9 +37,11 @@ for month in months:
     number_of_weeks = (5, 4)[month == '02' and not calendar.isleap(int(year))]
         
     for week in range(0, number_of_weeks):
+        
+        print(month, week + 1)
     
         opensky_states_filename = 'states_TMA_opensky_downloaded_' + year + '_' + month + '_week' + str(week + 1) + '.csv'
-        opensky_states_merged_with_ddr_m3_filename = 'states_TMA_opensky_merged_with_ddr_m3_' + year + '_' + month + '_' + str(week + 1) + '.csv'
+        opensky_states_merged_with_ddr_m3_filename = 'states_TMA_opensky_merged_with_ddr_m3_' + year + '_' + month + '_week' + str(week + 1) + '.csv'
 
     
         opensky_df = pd.read_csv(os.path.join(OPENSKY_INPUT_DIR, opensky_states_filename), sep=' ',
