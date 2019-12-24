@@ -6,7 +6,7 @@ start_time = time.time()
 
 year = '2018'
 
-DATA_INPUT_DIR = os.path.join("data", "states_TMA_opensky_" + year)
+DATA_INPUT_DIR = os.path.join("data", "states_TMA_opensky_merged_with_ddr_m3_" + year)
 input_filename = "states_TMA_opensky_" + year + ".csv"
 DATA_OUTPUT_DIR = os.path.join("data", "statistics_opensky_" + year)
 output_filename = "statistics_opensky_by_flight_" + year + ".csv"
@@ -14,9 +14,13 @@ output_filename = "statistics_opensky_by_flight_" + year + ".csv"
 
 def get_all_states(csv_input_file):
 
-    df = pd.read_csv(csv_input_file, sep=' ', index_col=[0,1],
-                    names = ['flightId', 'sequence', 'altitude', 'velocity', 'beginDate'],
-                    dtype={'flightId':int, 'sequence':int, 'altitude':float, 'velocity':float, 'beginDate':str})
+    df = pd.read_csv(csv_input_file, sep=' ',
+                    names = ['flightId', 'sequence', 'timestamp', 'lat', 'lon', 'altitude', 'velocity', 'endDate', 'aircraftType'],
+                    dtype={'flightId':int, 'sequence':int, 'timestamp':str, 'lat':float, 'lon':float, 'altitude':float, 'velocity':float, 'endDate':str})
+    
+    df = df[['flightId', 'sequence', 'altitude', 'velocity', 'endDate']]
+    
+    df.set_index(['flightId', 'sequence'], inplace=True)
 
     return df
 
@@ -34,7 +38,6 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
     vfe_df = pd.DataFrame(columns=['flight_id', 'date', 'number_of_levels', 'time_on_levels', 'time_on_levels_percent',
                                    'distance_on_levels', 'distance_on_levels_percent'])
 
-    #states_opensky_df.reset_index(level=states_opensky_df.index.names, inplace=True)
 
     number_of_levels_lst = []
     distance_on_levels_lst = []
@@ -47,11 +50,9 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
 
     count = 0
     for flight_id, flight_id_group in states_opensky_df.groupby(level='flightId'):
-
+        
         count = count + 1
-        print(flight_id_num, count)
-
-        #flight_id_states_df.set_index(['sequence'], inplace=True)
+        print(flight_id_num, count, flight_id)
 
         number_of_levels = 0
 
@@ -66,10 +67,7 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
         level = 'false'
         altitude1 = 0 # altitude at the beginning of rolling window
         altitude2 = 0 # altitude at the end of rolling window
-        altitude_level_begin = 0 #not used
-        altitude_level_end = 0   #can be removed
 
-        seq_level_begin = 0
         seq_level_end = 0
         seq_min_level_time = 0
 
@@ -79,14 +77,20 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
             if (seq + min_level_time) >= df_length:
                 break
 
-            altitude1 = row['altitude'].item()
-            altitude2 = flight_id_group.loc[flight_id, seq+min_level_time-1]['altitude'].item()
+            #print("row", row) 
+            #print("row[altitude]", row['altitude'])
+            altitude1 = row['altitude'].values[0]
+
+            altitude2 = flight_id_group.loc[flight_id, seq+min_level_time-1]['altitude']
+                    
+            #print('altitude1', altitude1)
+            #print('altitude2', altitude2)
 
             if altitude2 < descent_end_altitude:
                 break
 
             time_sum = time_sum + 1
-            distance_sum = distance_sum + row['velocity'].item()
+            distance_sum = distance_sum + row['velocity'].values[0]
 
             if abs(altitude1 - altitude2) > 1000:
                 continue
@@ -96,12 +100,11 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
                 if seq < seq_level_end:
                     if altitude1 - altitude2 < rolling_window_Y: #extend the level
                         seq_level_end = seq_level_end + 1
-                        altitude_level_end = altitude2
                     if seq < seq_min_level_time: # do not count first 30 seconds
                         continue
                     else:
                         time_on_level = time_on_level + 1
-                        distance_on_level = distance_on_level + row['velocity'].item()
+                        distance_on_level = distance_on_level + row['velocity'].values[0]
                 else: # level ends
                     if seq_level_end >= seq_min_level_time:
                         number_of_levels = number_of_levels + 1
@@ -113,13 +116,10 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
             else: #not level
                 if altitude1 - altitude2 < rolling_window_Y: # level begins
                     level = 'true'
-                    seq_level_begin = seq
                     seq_min_level_time = seq + min_level_time
                     seq_level_end = seq + min_level_time - 1
-                    altitude_level_begin = altitude1
-                    altitude_level_end = altitude2
                     time_on_level = time_on_level + 1
-                    distance_on_level = distance_on_level + row['velocity'].item()
+                    distance_on_level = distance_on_level + row['velocity'].values[0]
 
         if (time_sum == 0) or (distance_sum == 0):
             print(type(time_sum))
@@ -153,14 +153,14 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
         time_on_levels_percent_lst.append(time_on_levels_percent)
         time_on_levels_percent_str = "{0:.1f}".format(time_on_levels_percent)
 
-        date_str = states_opensky_df.loc[flight_id].head(1)['beginDate'].item()
+        date_str = states_opensky_df.loc[flight_id].head(1)['endDate'].values[0]
         
-        print(date_str)
-        print(number_of_levels_str)
-        print(distance_on_levels_str)
-        print(distance_on_levels_percent_str)
-        print(time_on_levels_str)
-        print(time_on_levels_percent_str)
+        #print(date_str)
+        #print(number_of_levels_str)
+        #print(distance_on_levels_str)
+        #print(distance_on_levels_percent_str)
+        #print(time_on_levels_str)
+        #print(time_on_levels_percent_str)
         vfe_df = vfe_df.append({'flight_id': flight_id, 'date': date_str, 'number_of_levels': number_of_levels_str,
                                 'distance_on_levels': distance_on_levels_str, 'distance_on_levels_percent': distance_on_levels_percent_str,
                                 'time_on_levels': time_on_levels_str, 'time_on_levels_percent': time_on_levels_percent_str}, ignore_index=True)
@@ -174,7 +174,8 @@ states_df = get_all_states(os.path.join(DATA_INPUT_DIR, input_filename))
 
 full_stat_csv_filename = os.path.join(DATA_OUTPUT_DIR, output_filename)
 
-number_of_flights = len(states_df.index.get_level_values('flightId').unique())
+#number_of_flights = len(states_df.index.get_level_values('flightId').unique())
+number_of_flights = len(states_df.groupby(level='flightId'))
 
 calculate_vfe(states_df, full_stat_csv_filename)
 

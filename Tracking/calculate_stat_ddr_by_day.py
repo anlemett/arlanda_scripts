@@ -74,7 +74,7 @@ for date, new_df in ddr_by_flight_df.groupby(level='endDate'):
                                           'average_add_time_TMA': ddr_average_add_time}, ignore_index=True)
     
     
-filename = "ddr_stat_by_day_" + year + ".csv"
+filename = "statistics_ddr_by_day_" + year + ".csv"
 
 ddr_by_day_df.to_csv(os.path.join(DATA_DIR, filename), sep=' ', encoding='utf-8', float_format='%.6f', header=None)
 

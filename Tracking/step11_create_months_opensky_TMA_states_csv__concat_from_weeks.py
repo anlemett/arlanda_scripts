@@ -25,6 +25,8 @@ for month in months:
                      dtype = {'date': str})
         
         opensky_states_df = opensky_states_df.append(df, ignore_index=True)
+        
+    opensky_states_df = opensky_states_df.drop_duplicates(['flightId','sequence'],keep= 'first')
 
     filename = 'states_TMA_opensky_' + year + '_' + month + '.csv'
     opensky_states_df.to_csv(os.path.join(DATA_DIR, filename), sep=' ', encoding='utf-8', float_format='%.6f', index=False, header=None)

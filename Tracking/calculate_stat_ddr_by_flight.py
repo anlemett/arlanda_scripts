@@ -15,7 +15,7 @@ DDR_M3_CSV = os.path.join(os.path.join(DATA_DIR, "tracks_ddr_m3_" + year), "trac
 TMA_DDR_M1_CSV = os.path.join(os.path.join(DATA_DIR, "tracks_TMA_ddr_m1_" + year), "tracks_TMA_ddr_m1_" + year + ".csv")
 TMA_DDR_M3_CSV = os.path.join(os.path.join(DATA_DIR, "tracks_TMA_ddr_m3_" + year), "tracks_TMA_ddr_m3_" + year + ".csv")
 
-#TODO: check the number of flights in ddr and TMA_ddr files
+
 def get_all_tracks(csv_input_file):
 
     df = pd.read_csv(csv_input_file, sep=' ',
@@ -84,7 +84,7 @@ TMA_m3_df = get_all_tracks(TMA_DDR_M3_CSV)
 TMA_m1_by_flight_df = pd.DataFrame(columns=['flight_id', 'TMA_time'])
 TMA_m3_by_flight_df = pd.DataFrame(columns=['flight_id', 'TMA_time'])
 
-print("ddr TMA m1 processing")
+print("TMA m1 processing")
 TMA_m1_flight_id_num = len(TMA_m1_df.groupby(level='flightId'))
 print("TMA_m1", TMA_m1_flight_id_num)
 
@@ -98,7 +98,7 @@ for id, new_df in TMA_m1_df.groupby(level='flightId'):
     TMA_time = end_timestamp - begin_timestamp
     TMA_m1_by_flight_df = TMA_m1_by_flight_df.append({'flight_id': id, 'TMA_time': TMA_time}, ignore_index=True)
 
-print("ddr m3 processing")
+print("TMA m3 processing")
 TMA_m3_flight_id_num = len(TMA_m3_df.groupby(level='flightId'))
 print(TMA_m3_flight_id_num)
 

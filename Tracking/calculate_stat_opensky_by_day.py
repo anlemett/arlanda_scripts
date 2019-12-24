@@ -16,7 +16,6 @@ output_filename = "statistics_opensky_by_day_" + year + ".csv"
 #flight_id date number_of_levels time_on_levels time_on_levels_percent distance_on_levels distance_on_levels_percent
 vfe_df = pd.read_csv(os.path.join(DATA_DIR, input_filename), sep=' ', dtype = {'date': str})
 
-
 vfe_df.set_index(['date'], inplace=True)
 
 vfe_by_day_df = pd.DataFrame(columns=['date', 'number_of_flights', 'number_of_level_flights', 'total_number_of_levels', 'average_number_of_levels',
@@ -24,6 +23,8 @@ vfe_by_day_df = pd.DataFrame(columns=['date', 'number_of_flights', 'number_of_le
 
 
 for date, new_df in vfe_df.groupby(level='date'):
+    
+    print(date)
 
     number_of_flights = len(new_df)
     
