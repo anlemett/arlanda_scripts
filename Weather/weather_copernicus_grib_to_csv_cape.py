@@ -27,29 +27,26 @@ from calendar import monthrange
 
 start_time = time.time()
 
-for month in range(1,13):
+for m in range(1,13):
     
-    number_of_days = monthrange(year, month)[1]
+    number_of_days = monthrange(year, m)[1]
     
     for d in range(1,number_of_days):
         for h in range(0,24):
-            cape_all=np.array(grbs.select(name='Convective available potential energy', day=d, hour=h, minute=0, second=0))[0]
-            print(cape_all.year)
-            print(cape_all.month)
-            print(cape_all.day)
-            print(cape_all.hour)
-            cape=cape_all.data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
+            selected_grbs=np.array(grbs.select(name='Convective available potential energy', month = m, day=d, hour=h, minute=0, second=0))
+            # selected_grbs has one element
+            cape=selected_grbs[0].data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
     	    #print(cape)
-            for lat in range(8,-1,-1):
-    	        for lon in range (8,-1,-1):
+            print(m, d, h)
+            for lat_idx in range(8,-1,-1):
+    	        for lon_idx in range (8,-1,-1):
     	            new_d = {}
     	            new_d['time'] = h
-    	            new_d['lat'] = cape[1][lat][0]
-    	            new_d['lon'] = cape[2][0][lon]
-    	            new_d['cape'] = cape[0][lat][lon]
+    	            new_d['lat'] = cape[1][lat_idx][0]
+    	            new_d['lon'] = cape[2][0][lon_idx]
+    	            new_d['cape'] = cape[0][lat_idx][lon_idx]
             
     	            new_data.append(new_d)
-    	            #print(i, cape[1][lat][0], cape[2][0][lon], cape[0][lat][lon])
 
 data_df = pd.DataFrame(new_data, columns = ['time', 'lat', 'lon', 'cape'])
 

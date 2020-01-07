@@ -21,20 +21,19 @@ my_x2 = 19
 new_data = []
 
 for i in range(0,24):
-    cape_all=np.array(grbs.select(name='Convective available potential energy', hour=i, minute=0, second=0))[0]
+    selected_grbs=np.array(grbs.select(name='Convective available potential energy', hour=i, minute=0, second=0))
 
-    cape=cape_all.data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
+    cape=selected_grbs[0].data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
     #print(cape)
-    for lat in range(8,-1,-1):
-        for lon in range (8,-1,-1):
+    for lat_idx in range(8,-1,-1):
+        for lon_idx in range (8,-1,-1):
             new_d = {}
             new_d['time'] = i
-            new_d['lat'] = cape[1][lat][0]
-            new_d['lon'] = cape[2][0][lon]
-            new_d['cape'] = cape[0][lat][lon]
+            new_d['lat'] = cape[1][lat_idx][0]
+            new_d['lon'] = cape[2][0][lon_idx]
+            new_d['cape'] = cape[0][lat_idx][lon_idx]
             
             new_data.append(new_d)
-            #print(i, cape[1][lat][0], cape[2][0][lon], cape[0][lat][lon])
 
 
 data_df = pd.DataFrame(new_data, columns = ['time', 'lat', 'lon', 'cape'])
