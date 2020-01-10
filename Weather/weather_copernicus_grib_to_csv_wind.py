@@ -41,6 +41,8 @@ for m in range(1,13):
             selected_grbs=np.array(grbs.select(name='10 metre V wind component', month=1, day=1, hour=h, minute=0, second=0))
             v_component = selected_grbs[0].data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
             
+            print(m, d, h)
+            
             for lat_idx in range(8,-1,-1):
                 for lon_idx in range (8,-1,-1):
                     new_d = {}

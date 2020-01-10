@@ -43,6 +43,8 @@ for m in range(1,13):
             selected_grbs=np.array(grbs.select(name='Precipitation type', month=m, day=d, hour=h, minute=0, second=0))
             precipitation_type=selected_grbs[0].data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
 
+            print(m, d, h)
+            
             for lat_idx in range(8,-1,-1):
                 for lon_idx in range (8,-1,-1):
                     new_d = {}

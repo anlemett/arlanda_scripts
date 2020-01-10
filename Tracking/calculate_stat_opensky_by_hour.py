@@ -46,17 +46,17 @@ for date, date_df in vfe_df.groupby(level='date'):
 
         time_on_levels_hour = hour_df['time_on_levels'].values # np array
         
-        total_time_on_levels_hour = np.sum(time_on_levels_hour)
+        total_time_on_levels_hour = round(np.sum(time_on_levels_hour), 3)
         
         average_time_on_levels_hour = total_time_on_levels_hour/len(time_on_levels_hour) if time_on_levels_hour.any() else 0
         
-        min_time_on_levels_hour = np.min(time_on_levels_hour) if time_on_levels_hour.any() else 0
+        min_time_on_levels_hour = round(np.min(time_on_levels_hour), 3) if time_on_levels_hour.any() else 0
         
-        max_time_on_levels_hour = np.max(time_on_levels_hour) if time_on_levels_hour.any() else 0
+        max_time_on_levels_hour = round(np.max(time_on_levels_hour), 3) if time_on_levels_hour.any() else 0
 
         distance_on_levels_hour = hour_df['distance_on_levels'].values # np array       
         
-        total_distance_on_levels_hour = np.sum(distance_on_levels_hour)
+        total_distance_on_levels_hour = round(np.sum(distance_on_levels_hour), 3)
         
         average_distance_on_levels_hour = total_distance_on_levels_hour/len(distance_on_levels_hour) if distance_on_levels_hour.any() else 0
 

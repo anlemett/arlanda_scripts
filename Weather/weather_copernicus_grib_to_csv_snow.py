@@ -34,6 +34,7 @@ for m in range(1,13):
     for d in range(1,number_of_days):
 
         for h in range(0,24):
+            
             selected_grbs=np.array(grbs.select(name='Snow density', month=m, day=d, hour=h, minute=0, second=0))
             snow_density = selected_grbs[0].data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
             
