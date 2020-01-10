@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 
+from datetime import datetime
+
 import time
 start_time = time.time()
 
@@ -16,9 +18,9 @@ def get_all_states(csv_input_file):
 
     df = pd.read_csv(csv_input_file, sep=' ',
                     names = ['flightId', 'sequence', 'timestamp', 'lat', 'lon', 'altitude', 'velocity', 'endDate', 'aircraftType'],
-                    dtype={'flightId':int, 'sequence':int, 'timestamp':str, 'lat':float, 'lon':float, 'altitude':float, 'velocity':float, 'endDate':str})
+                    dtype={'flightId':int, 'sequence':int, 'timestamp':int, 'lat':float, 'lon':float, 'altitude':float, 'velocity':float, 'endDate':str})
     
-    df = df[['flightId', 'sequence', 'altitude', 'velocity', 'endDate']]
+    df = df[['flightId', 'sequence', 'timestamp', 'altitude', 'velocity', 'endDate']]
     
     df.set_index(['flightId', 'sequence'], inplace=True)
 
@@ -35,7 +37,7 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
     descent_end_altitude = 1800 / 3.281
     #print(descent_end_altitude)
 
-    vfe_df = pd.DataFrame(columns=['flight_id', 'date', 'number_of_levels', 'time_on_levels', 'time_on_levels_percent',
+    vfe_df = pd.DataFrame(columns=['flight_id', 'date', 'hour', 'number_of_levels', 'time_on_levels', 'time_on_levels_percent',
                                    'distance_on_levels', 'distance_on_levels_percent'])
 
 
@@ -155,17 +157,23 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
 
         date_str = states_opensky_df.loc[flight_id].head(1)['endDate'].values[0]
         
+        #end_timestamp = states_opensky_df.loc[flight_id]['timestamp'].values[-1].item(0)
+        end_timestamp = states_opensky_df.loc[flight_id]['timestamp'].values[-1]
+        end_datetime = datetime.utcfromtimestamp(end_timestamp)
+        end_hour_str = end_datetime.strftime('%H')
+        
+        
         #print(date_str)
         #print(number_of_levels_str)
         #print(distance_on_levels_str)
         #print(distance_on_levels_percent_str)
         #print(time_on_levels_str)
         #print(time_on_levels_percent_str)
-        vfe_df = vfe_df.append({'flight_id': flight_id, 'date': date_str, 'number_of_levels': number_of_levels_str,
+        vfe_df = vfe_df.append({'flight_id': flight_id, 'date': date_str, 'hour': end_hour_str, 'number_of_levels': number_of_levels_str,
                                 'distance_on_levels': distance_on_levels_str, 'distance_on_levels_percent': distance_on_levels_percent_str,
                                 'time_on_levels': time_on_levels_str, 'time_on_levels_percent': time_on_levels_percent_str}, ignore_index=True)
 
-    vfe_df.to_csv(full_vfe_csv_filename, sep=' ', encoding='utf-8', float_format='%.1f', header=True, index=False)
+    vfe_df.to_csv(full_vfe_csv_filename, sep=' ', encoding='utf-8', float_format='%.3f', header=True, index=False)
 
 
 
