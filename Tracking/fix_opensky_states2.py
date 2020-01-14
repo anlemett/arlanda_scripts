@@ -19,7 +19,15 @@ for month in months:
     
     df.set_index(['flightId'], inplace=True)
     
+    flight_id_num = len(df.groupby(level='flightId'))
+    
+    count = 0
+    
     for flight_id, flight_id_group in df.groupby(level='flightId'):
+        
+        count = count + 1
+        print(flight_id_num, count)
+        
         flight_id_group_length = len(flight_id_group)
         
         sequence_list = list(range(flight_id_group_length))
