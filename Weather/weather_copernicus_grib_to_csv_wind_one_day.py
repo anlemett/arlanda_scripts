@@ -30,7 +30,6 @@ start_time = time.time()
 selected_grbs=np.array(grbs.select(month=1, day=1))
 for grb in selected_grbs:
     print(grb)
-print("******************")
 
 
 for h in range(0,24):
@@ -49,7 +48,9 @@ for h in range(0,24):
     for lat_idx in range(8,-1,-1):
         for lon_idx in range (8,-1,-1):
             new_d = {}
-            new_d['time'] = h
+            new_d['month'] = 1
+            new_d['day'] = 1
+            new_d['hour'] = h
             new_d['u_component'] = u_component[0][lat_idx][lon_idx]
             new_d['v_component'] = v_component[0][lat_idx][lon_idx]
             
@@ -58,8 +59,7 @@ for h in range(0,24):
             
             new_data.append(new_d)
 
-#data_df = pd.DataFrame(new_data, columns = ['time', 'lat', 'lon', 'wind_gust', 'u_component', 'v_component'])
-data_df = pd.DataFrame(new_data, columns = ['time', 'lat', 'lon', 'u_component', 'v_component'])
+data_df = pd.DataFrame(new_data, columns = ['month', 'day', 'hour', 'lat', 'lon', 'u_component', 'v_component'])
 
 data_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_wind_010118.csv", sep=' ', encoding='utf-8', float_format='%.6f', header=True, index=False)
 

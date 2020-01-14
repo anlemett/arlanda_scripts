@@ -44,14 +44,16 @@ for h in range(0,24):
             for lat_idx in range(8,-1,-1):
                 for lon_idx in range (8,-1,-1):
                     new_d = {}
-                    new_d['time'] = h
+                    new_d['month'] = 1
+                    new_d['day'] = 1
+                    new_d['hour'] = h
                     new_d['lat'] = precipitation[1][lat_idx][0]
                     new_d['lon'] = precipitation[2][0][lon_idx]
                     new_d['precipitation'] = precipitation[0][lat_idx][lon_idx]
             
                     new_data.append(new_d)
 
-data_df = pd.DataFrame(new_data, columns = ['time', 'lat', 'lon', 'precipitation'])
+data_df = pd.DataFrame(new_data, columns = ['month', 'day', 'hour', 'lat', 'lon', 'precipitation'])
 
 data_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_precipitation_010118.csv", sep=' ', encoding='utf-8', float_format='%.6f', header=True, index=False)
 """

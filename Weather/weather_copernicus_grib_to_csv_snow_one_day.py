@@ -39,7 +39,9 @@ for h in range(0,24):
     for lat_idx in range(8,-1,-1):
         for lon_idx in range (8,-1,-1):
             new_d = {}
-            new_d['time'] = h
+            new_d['month'] = 2
+            new_d['day'] = 1
+            new_d['hour'] = h
             new_d['lat'] = snow_dencity[1][lat_idx][0]
             new_d['lon'] = snow_dencity[2][0][lon_idx]
             new_d['snow_dencity'] = snow_dencity[0][lat_idx][lon_idx]
@@ -47,7 +49,7 @@ for h in range(0,24):
             
             new_data.append(new_d)
 
-data_df = pd.DataFrame(new_data, columns = ['time', 'lat', 'lon', 'snow_dencity', 'snow_depth'])
+data_df = pd.DataFrame(new_data, columns = ['month', 'day', 'hour', 'lat', 'lon', 'snow_dencity', 'snow_depth'])
 
 data_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_snow_010218.csv", sep=' ', encoding='utf-8', float_format='%.6f', header=True, index=False)
 

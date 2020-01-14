@@ -31,14 +31,14 @@ for m in range(1,13):
     
     number_of_days = monthrange(year, m)[1]
     
-    for d in range(1,number_of_days):
+    for d in range(1,number_of_days+1):
 
         for h in range(0,24):
-
-            selected_grbs=np.array(grbs.select(name='10 metre U wind component', month=1, day=1, hour=h, minute=0, second=0))
+            
+            selected_grbs=np.array(grbs.select(name='10 metre U wind component', month=m, day=d, hour=h, minute=0, second=0))
             u_component = selected_grbs[0].data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
     
-            selected_grbs=np.array(grbs.select(name='10 metre V wind component', month=1, day=1, hour=h, minute=0, second=0))
+            selected_grbs=np.array(grbs.select(name='10 metre V wind component', month=m, day=d, hour=h, minute=0, second=0))
             v_component = selected_grbs[0].data(lat1=my_y1,lat2=my_y2,lon1=my_x1,lon2=my_x2)
             
             print(m, d, h)
@@ -46,7 +46,9 @@ for m in range(1,13):
             for lat_idx in range(8,-1,-1):
                 for lon_idx in range (8,-1,-1):
                     new_d = {}
-                    new_d['time'] = h
+                    new_d['month'] = m
+                    new_d['day'] = d
+                    new_d['hour'] = h
 
                     new_d['u_component'] = u_component[0][lat_idx][lon_idx]
                     new_d['v_component'] = v_component[0][lat_idx][lon_idx]
@@ -56,7 +58,7 @@ for m in range(1,13):
                     
                     new_data.append(new_d)
 
-data_df = pd.DataFrame(new_data, columns = ['time', 'lat', 'lon', 'u_component', 'v_component'])
+data_df = pd.DataFrame(new_data, columns = ['month', 'day', 'hour', 'lat', 'lon', 'u_component', 'v_component'])
 
 data_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_cape_2018.csv", sep=' ', encoding='utf-8', float_format='%.6f', header=True, index=False)
 
