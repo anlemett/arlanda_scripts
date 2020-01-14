@@ -84,8 +84,8 @@ stat_by_flight_df.reset_index(drop=True, inplace=True)
 TMA_m1_df = get_all_tracks(TMA_DDR_M1_CSV)
 TMA_m3_df = get_all_tracks(TMA_DDR_M3_CSV)
 
-TMA_m1_by_flight_df = pd.DataFrame(columns=['flightId', 'TMA_Time'])
-TMA_m3_by_flight_df = pd.DataFrame(columns=['flightId', 'TMA_Time'])
+TMA_m1_by_flight_df = pd.DataFrame(columns=['flightId', 'TMA_time'])
+TMA_m3_by_flight_df = pd.DataFrame(columns=['flightId', 'TMA_time'])
 
 print("TMA m1 processing")
 TMA_m1_flight_id_num = len(TMA_m1_df.groupby(level='flightId'))
@@ -99,7 +99,7 @@ for id, new_df in TMA_m1_df.groupby(level='flightId'):
     begin_timestamp = new_df['beginTimestamp'].values[0]
     end_timestamp = new_df['endTimestamp'].values[-1]
     TMA_time = end_timestamp - begin_timestamp
-    TMA_m1_by_flight_df = TMA_m1_by_flight_df.append({'flightId': id, 'TMA_Time': TMA_time}, ignore_index=True)
+    TMA_m1_by_flight_df = TMA_m1_by_flight_df.append({'flightId': id, 'TMA_time': TMA_time}, ignore_index=True)
 
 print("TMA m3 processing")
 TMA_m3_flight_id_num = len(TMA_m3_df.groupby(level='flightId'))
@@ -113,13 +113,13 @@ for id, new_df in TMA_m3_df.groupby(level='flightId'):
     begin_time = new_df['beginTimestamp'].values[0].item(0)
     end_time = new_df['endTimestamp'].values[-1].item(0)
     TMA_time = end_time - begin_time
-    TMA_m3_by_flight_df = TMA_m3_by_flight_df.append({'flightId': id, 'TMA_Time': TMA_time}, ignore_index=True)
+    TMA_m3_by_flight_df = TMA_m3_by_flight_df.append({'flightId': id, 'TMA_time': TMA_time}, ignore_index=True)
 
 print("TMA ddr stat")
 
 TMA_stat_by_flight_df = pd.merge(TMA_m1_by_flight_df, TMA_m3_by_flight_df, on=['flightId'], suffixes=["_L", "_R"])
-TMA_stat_by_flight_df['add_TMA_Time'] = TMA_stat_by_flight_df['TMA_Time_R'] - TMA_stat_by_flight_df['TMA_Time_L']
-TMA_stat_by_flight_df = TMA_stat_by_flight_df[['flightId', 'add_TMA_Time']]
+TMA_stat_by_flight_df['add_TMA_time'] = TMA_stat_by_flight_df['TMA_time_R'] - TMA_stat_by_flight_df['TMA_time_L']
+TMA_stat_by_flight_df = TMA_stat_by_flight_df[['flightId', 'add_TMA_time']]
 TMA_stat_by_flight_df.reset_index(drop=True, inplace=True)
     
 
@@ -128,7 +128,8 @@ print("merging stat")
 ddr_stat_by_flight_df = pd.merge(stat_by_flight_df, TMA_stat_by_flight_df, on=['flightId'])
 ddr_stat_by_flight_df.reset_index(drop=True, inplace=True)
     
+#endDate endTime endHour flightId departure_delay arrival_delay enroute_delay add_TMA_time
 filename = "statistics_ddr_by_flight_" + year + ".csv"
-ddr_stat_by_flight_df.to_csv(os.path.join(OUTPUT_DIR, filename), sep=' ', encoding='utf-8', float_format='%.3f', header=True, index=False)
+ddr_stat_by_flight_df.to_csv(os.path.join(OUTPUT_DIR, filename), sep=' ', encoding='utf-8', float_format='%.3f', header=False, index=False)
 
 print("--- %s minutes ---" % ((time.time() - start_time)/60))

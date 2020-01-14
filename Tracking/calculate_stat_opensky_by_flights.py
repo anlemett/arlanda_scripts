@@ -18,7 +18,7 @@ def get_all_states(csv_input_file):
 
     df = pd.read_csv(csv_input_file, sep=' ',
                     names = ['flightId', 'sequence', 'timestamp', 'lat', 'lon', 'altitude', 'velocity', 'endDate', 'aircraftType'],
-                    dtype={'flightId':int, 'sequence':int, 'timestamp':int, 'lat':float, 'lon':float, 'altitude':float, 'velocity':float, 'endDate':str})
+                    dtype={'flightId':int, 'sequence':int, 'timestamp':int, 'lat':float, 'lon':float, 'altitude':float, 'velocity':float, 'endDate':str, 'aircraftType':str})
     
     df = df[['flightId', 'sequence', 'timestamp', 'altitude', 'velocity', 'endDate']]
     
