@@ -6,6 +6,7 @@ OUTPUT_DIR = os.path.join("data", "tracks_opensky_downloaded_" + year)
 
 
 from datetime import datetime
+from datetime import timezone
 import calendar
 
 TMA_timezone = "Europe/Stockholm"
@@ -150,11 +151,11 @@ for month in months:
     
     for week in range(0,4):
 
-        DATE_TIME_BEGIN = datetime(int(year), int(month), week * 7 + 1, 0, 0, 0, 0)
+        DATE_TIME_BEGIN = datetime(int(year), int(month), week * 7 + 1, 0, 0, 0, 0, timezone.utc)
         if month == '02' and not calendar.isleap(int(year)):
             DATE_TIME_END = datetime(int(year), 3, 1, 0, 0, 0, 0)
         else:
-            DATE_TIME_END = datetime(int(year), int(month), (week + 1) * 7 + 1, 0, 0, 0, 0)
+            DATE_TIME_END = datetime(int(year), int(month), (week + 1) * 7 + 1, 0, 0, 0, 0, timezone.utc)
             
         proc = Process(target=download_tracks_week, args=(month, week + 1, DATE_TIME_BEGIN, DATE_TIME_END,))
         procs.append(proc)
@@ -163,11 +164,11 @@ for month in months:
     if month == '02' and not calendar.isleap(int(year)):
         continue
     elif month == '12':
-        DATE_TIME_BEGIN = datetime(int(year), 12, 29, 0, 0, 0, 0)
-        DATE_TIME_END = datetime(int(year) + 1, 1, 1, 0, 0, 0, 0)
+        DATE_TIME_BEGIN = datetime(int(year), 12, 29, 0, 0, 0, 0, timezone.utc)
+        DATE_TIME_END = datetime(int(year) + 1, 1, 1, 0, 0, 0, 0, timezone.utc)
     else:
-        DATE_TIME_BEGIN = datetime(int(year), int(month), 29, 0, 0, 0, 0)
-        DATE_TIME_END = datetime(int(year), int(month) + 1, 1, 0, 0, 0, 0)
+        DATE_TIME_BEGIN = datetime(int(year), int(month), 29, 0, 0, 0, 0, timezone.utc)
+        DATE_TIME_END = datetime(int(year), int(month) + 1, 1, 0, 0, 0, 0, timezone.utc)
     
     proc = Process(target=download_tracks_week, args=(month, 5, DATE_TIME_BEGIN, DATE_TIME_END,))
     procs.append(proc)

@@ -7,9 +7,13 @@ c.retrieve(
     {
         'product_type': 'reanalysis',
         'variable': [
-            'snow_density', 'snow_depth', 'snowfall',
+            '2m_temperature', 'convective_inhibition', 'convective_precipitation',
+            'convective_rain_rate', 'convective_snowfall', 'convective_snowfall_rate_water_equivalent',
+            'high_cloud_cover', 'low_cloud_cover', 'mean_convective_precipitation_rate',
+            'mean_convective_snowfall_rate', 'mean_snowfall_rate', 'mean_total_precipitation_rate',
+            'medium_cloud_cover',
         ],
-    	'area': '61/17/59/19',
+        'area': '61/17/59/19',
         'year': '2018',
         'month': [
             '01', '02', '03',
@@ -40,6 +44,6 @@ c.retrieve(
             '18:00', '19:00', '20:00',
             '21:00', '22:00', '23:00',
         ],
-        'format': 'grib',
+        'format': 'netcdf',
     },
-    'data/weather_copernicus_TMA_grib_2018/copernicus_TMA_snow_2018.grib')
+    'data/weather_copernicus_TMA_grib_2018/copernicus_TMA_add_weather_2018.nc')

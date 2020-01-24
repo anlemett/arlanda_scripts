@@ -9,7 +9,7 @@ c.retrieve(
         'variable': [
             'precipitation_type', 'total_precipitation',
         ],
-	'area': '61/17/59/19',
+	    'area': '61/17/59/19',
         'year': '2018',
         'month': [
             '01', '02', '03',

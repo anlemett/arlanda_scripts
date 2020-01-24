@@ -19,9 +19,11 @@ vfe_df = pd.read_csv(os.path.join(DATA_DIR, input_filename), sep=' ', dtype = {'
 vfe_df.set_index(['date'], inplace=True)
 
 vfe_by_hour_df = pd.DataFrame(columns=['date', 'hour', 'number_of_flights', 'number_of_level_flights',
-                            'total_number_of_levels', 'average_number_of_levels',
-                            'total_time_on_levels', 'average_time_on_levels', 'min_time_on_levels', 'max_time_on_levels',
-                            'total_distance_on_levels', 'average_distance_on_levels'])
+                             'number_of_levels_total', 'number_of_levels_mean', 'number_of_levels_median',
+                             'time_on_levels_total', 'time_on_levels_mean', 'time_on_levels_median',
+                             'time_on_levels_min', 'time_on_levels_max',
+                             'distance_on_levels_total', 'distance_on_levels_mean', 'distance_on_levels_median'
+                             ])
 
 
 for date, date_df in vfe_df.groupby(level='date'):
@@ -43,12 +45,16 @@ for date, date_df in vfe_df.groupby(level='date'):
         total_number_of_levels_hour = np.sum(number_of_levels_hour)
 
         average_number_of_levels_hour = total_number_of_levels_hour/len(number_of_levels_hour) if number_of_levels_hour.any() else 0
+        
+        median_number_of_levels_hour = np.median(number_of_levels_hour) if number_of_levels_hour.any() else 0
 
         time_on_levels_hour = hour_df['time_on_levels'].values # np array
         
         total_time_on_levels_hour = round(np.sum(time_on_levels_hour), 3)
         
         average_time_on_levels_hour = total_time_on_levels_hour/len(time_on_levels_hour) if time_on_levels_hour.any() else 0
+        
+        median_time_on_levels_hour = np.median(time_on_levels_hour) if time_on_levels_hour.any() else 0
         
         min_time_on_levels_hour = round(np.min(time_on_levels_hour), 3) if time_on_levels_hour.any() else 0
         
@@ -59,13 +65,21 @@ for date, date_df in vfe_df.groupby(level='date'):
         total_distance_on_levels_hour = round(np.sum(distance_on_levels_hour), 3)
         
         average_distance_on_levels_hour = total_distance_on_levels_hour/len(distance_on_levels_hour) if distance_on_levels_hour.any() else 0
+        
+        median_distance_on_levels_hour = np.median(distance_on_levels_hour) if distance_on_levels_hour.any() else 0
 
         vfe_by_hour_df = vfe_by_hour_df.append({'date': date, 'hour': hour, 'number_of_flights': number_of_flights_hour,
                 'number_of_level_flights': number_of_level_flights_hour,
-                'total_number_of_levels': total_number_of_levels_hour, 'average_number_of_levels': average_number_of_levels_hour,
-                'total_time_on_levels': total_time_on_levels_hour, 'average_time_on_levels': average_time_on_levels_hour,
-                'min_time_on_levels': min_time_on_levels_hour, 'max_time_on_levels': max_time_on_levels_hour,
-                'total_distance_on_levels': total_distance_on_levels_hour, 'average_distance_on_levels': average_distance_on_levels_hour
+                'number_of_levels_total': total_number_of_levels_hour,
+                'number_of_levels_mean': average_number_of_levels_hour,
+                'number_of_levels_median': median_number_of_levels_hour,
+                'time_on_levels_total': total_time_on_levels_hour,
+                'time_on_levels_mean': average_time_on_levels_hour,
+                'time_on_levels_median': median_time_on_levels_hour,
+                'time_on_levels_min': min_time_on_levels_hour, 'time_on_levels_max': max_time_on_levels_hour,
+                'distance_on_levels_total': total_distance_on_levels_hour,
+                'distance_on_levels_mean': average_distance_on_levels_hour,
+                'distance_on_levels_median': median_distance_on_levels_hour
                 }, ignore_index=True)
 
 # not all dates in opensky states, creating empty rows for missing dates

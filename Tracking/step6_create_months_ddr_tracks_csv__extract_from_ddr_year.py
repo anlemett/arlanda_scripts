@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import timezone
 
 import pandas as pd
 
@@ -82,11 +83,11 @@ months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'
 
 for month in months:
     #UTC time:
-    DATE_TIME_BEGIN = datetime(int(year), int(month), 1, 0, 0, 0, 0)
+    DATE_TIME_BEGIN = datetime(int(year), int(month), 1, 0, 0, 0, 0, timezone.utc)
     if month == '12':
-        DATE_TIME_END = datetime(int(year) + 1, 1, 1, 0, 0, 0, 0)
+        DATE_TIME_END = datetime(int(year) + 1, 1, 1, 0, 0, 0, 0, timezone.utc)
     else:
-        DATE_TIME_END = datetime(int(year), int(month) + 1, 1, 0, 0, 0, 0)
+        DATE_TIME_END = datetime(int(year), int(month) + 1, 1, 0, 0, 0, 0, timezone.utc)
 
     #get_ddr_month(DATE_TIME_BEGIN, DATE_TIME_END, True)
     get_ddr_month(DATE_TIME_BEGIN, DATE_TIME_END, False)

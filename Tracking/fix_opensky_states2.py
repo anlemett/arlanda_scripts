@@ -26,7 +26,7 @@ for month in months:
     for flight_id, flight_id_group in df.groupby(level='flightId'):
         
         count = count + 1
-        print(flight_id_num, count)
+        print(month, flight_id_num, count)
         
         flight_id_group_length = len(flight_id_group)
         

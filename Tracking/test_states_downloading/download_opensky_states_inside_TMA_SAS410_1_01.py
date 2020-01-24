@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import timezone
 
 import time
 start_time = time.time()
@@ -7,8 +8,8 @@ start_time = time.time()
 year = "2018"
 
 #UTC time:
-DATE_TIME_BEGIN = datetime(2018, 1, 1, 0, 0, 0, 0)
-DATE_TIME_END = datetime(2018, 1, 2, 0, 0, 0, 0)
+DATE_TIME_BEGIN = datetime(2018, 1, 1, 0, 0, 0, 0, timezone.utc)
+DATE_TIME_END = datetime(2018, 1, 2, 0, 0, 0, 0, timezone.utc)
 
 from opensky_credentials import USERNAME, PASSWORD
 

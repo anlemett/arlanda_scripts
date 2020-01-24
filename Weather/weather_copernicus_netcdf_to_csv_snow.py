@@ -36,7 +36,7 @@ df['hour'] = df.apply(lambda row: getHour(row['time']), axis=1)
 
 
 
-df = df[['month','day','hour', 'lat', 'lon', 'rsn', 'sd']] # rsn - snow density, sd - snow depth
+df = df[['month','day','hour', 'lat', 'lon', 'rsn', 'sd', 'sf']] # rsn - snow density, sd - snow depth, sf - snow fall
 
 df = df.sort_values(by = ['month', 'day', 'hour', 'lat', 'lon'], ascending = [True, True, True, True, False])
 

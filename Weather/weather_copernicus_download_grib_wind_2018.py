@@ -9,7 +9,7 @@ c.retrieve(
         'variable': [
             '10m_u_component_of_wind', '10m_v_component_of_wind', 'instantaneous_10m_wind_gust',
         ],
-	'area': '61/17/59/19',
+	    'area': '61/17/59/19',
         'year': '2018',
         'month': [
             '01', '02', '03',

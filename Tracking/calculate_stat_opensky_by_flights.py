@@ -8,11 +8,6 @@ start_time = time.time()
 
 year = '2018'
 
-DATA_INPUT_DIR = os.path.join("data", "states_TMA_opensky_merged_with_ddr_m3_" + year)
-input_filename = "states_TMA_opensky_" + year + ".csv"
-DATA_OUTPUT_DIR = os.path.join("data", "statistics_opensky_" + year)
-output_filename = "statistics_opensky_by_flight_" + year + ".csv"
-
 
 def get_all_states(csv_input_file):
 
@@ -177,14 +172,22 @@ def calculate_vfe(states_opensky_df, full_vfe_csv_filename):
 
 
 
-states_df = get_all_states(os.path.join(DATA_INPUT_DIR, input_filename))
+def main():
+    DATA_INPUT_DIR = os.path.join("data", "states_TMA_opensky_merged_with_ddr_m3_" + year)
+    input_filename = "states_TMA_opensky_" + year + ".csv"
+    DATA_OUTPUT_DIR = os.path.join("data", "statistics_opensky_" + year)
+    output_filename = "statistics_opensky_by_flight_" + year + ".csv"
+
+    states_df = get_all_states(os.path.join(DATA_INPUT_DIR, input_filename))
 
 
-full_stat_csv_filename = os.path.join(DATA_OUTPUT_DIR, output_filename)
+    full_stat_csv_filename = os.path.join(DATA_OUTPUT_DIR, output_filename)
 
-#number_of_flights = len(states_df.index.get_level_values('flightId').unique())
-number_of_flights = len(states_df.groupby(level='flightId'))
+    #number_of_flights = len(states_df.groupby(level='flightId'))
 
-calculate_vfe(states_df, full_stat_csv_filename)
+    calculate_vfe(states_df, full_stat_csv_filename)
+    
+    
+main()    
 
 print("--- %s minutes ---" % ((time.time() - start_time)/60))
