@@ -1,12 +1,12 @@
 import pandas as pd
 
-snow_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_snow_norm_2018.csv", sep=' ', index_col=0)
-cape_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_cape_norm_2018.csv", sep=' ', index_col=0)
-wind_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_wind_norm_2018.csv", sep=' ', index_col=0)
+snow_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_snow_2018.csv", sep=' ')
+cape_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_cape_2018.csv", sep=' ')
+wind_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_wind_2018.csv", sep=' ')
 cloud_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_cloud_2018.csv", sep=' ', index_col=0)
-add_weather_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_add_weather_norm_2018.csv", sep=' ', index_col=0)
 
 
+print(cloud_df.head(1))
 cloud_df.set_index(['month', 'day', 'hour'], inplace=True)
 
 mean_cloud = []
@@ -18,7 +18,7 @@ year_cloud_df['tcc'] = mean_cloud
 year_cloud_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_cloud_mean_2018.csv", sep=' ', float_format='%.3f', encoding='utf-8')
 
 
-
+print(snow_df.head(1))
 snow_df.set_index(['month', 'day', 'hour'], inplace=True)
 
 mean_snow_depth = []
@@ -33,7 +33,7 @@ year_snow_df['rsn'] = mean_snow_density
 year_snow_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_snow_mean_2018.csv", sep=' ', float_format='%.3f', encoding='utf-8')
 
 
-
+print(cape_df.head(1))
 cape_df.set_index(['month', 'day', 'hour'], inplace=True)
 
 mean_cape = []
@@ -51,7 +51,7 @@ year_cape_df['hour'] = hour
 year_cape_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_cape_mean_2018.csv", sep=' ', float_format='%.3f', encoding='utf-8')
 
 
-
+print(wind_df.head(1))
 wind_df.set_index(['month', 'day', 'hour'], inplace=True)
 
 mean_wind_gust = []
@@ -66,7 +66,8 @@ year_wind_df['wind'] = mean_wind
 year_wind_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_wind_mean_2018.csv", sep=' ', float_format='%.3f', encoding='utf-8')
 
 
-
+'''
+add_weather_df = pd.read_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_add_weather_2018.csv", sep=' ', index_col=0)
 add_weather_df.set_index(['month', 'day', 'hour'], inplace=True)
 # 't2m', 'crr', 'csf', 'csfr', 'hcc', 'lcc', 'mcpr', 'msr', 'mtpr', 'mcc'
 mean_t2m = []
@@ -106,3 +107,4 @@ year_add_weather_df['mtpr'] = mean_mtpr
 year_add_weather_df['mcc'] = mean_mcc
 
 year_add_weather_df.to_csv("data/weather_copernicus_TMA_csv_2018/copernicus_TMA_add_weather_mean_2018.csv", sep=' ', float_format='%.3f', encoding='utf-8')
+'''
