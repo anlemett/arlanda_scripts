@@ -13,11 +13,7 @@ DATA_DIR = os.path.join("data", "statistics_ddr_" + year)
 filename = "statistics_ddr_by_flight_" + year + ".csv"
 
 # endDate endTime endHour flightId departure_delay arrival_delay enroute_delay add_TMA_Time
-ddr_by_flight_df = pd.read_csv(os.path.join(DATA_DIR, filename), sep=' ',
-                               dtype={'end_date':str, 'end_time':str, 'end_hour':int, 'flight_id':int, 
-                                      'departure_delay':int, 'arrival_delay':int,
-                                      'enroute_delay':int, 'add_time':int
-                                      })
+ddr_by_flight_df = pd.read_csv(os.path.join(DATA_DIR, filename), sep=' ', index_col=[0])
 
 ddr_by_flight_df.set_index(['end_date'], inplace=True)
 
@@ -28,7 +24,7 @@ ddr_by_hour_df = pd.DataFrame(columns=['end_date', 'end_hour', 'number_of_flight
                                       'arrival_delay_total', 'arrival_delay_mean', 'arrival_delay_median',
                                       'enroute_delay_total', 'enroute_delay_mean', 'enroute_delay_median',
                                       'add_time_TMA_total', 'add_time_TMA_mean', 'add_time_TMA_median',                               
-                                      'add_time_TMA_min', 'add_time_TMA_max'])
+                                      'add_time_TMA_min', 'add_time_TMA_max', 'dif_time_mean'])
 
 days_num = len(ddr_by_flight_df.groupby(level='end_date'))
 print(days_num)
@@ -57,6 +53,7 @@ for date, date_df in ddr_by_flight_df.groupby(level='end_date'):
             ddr_average_add_time = 0
             ddr_min_add_time = 0
             ddr_max_add_time = 0
+            ddr_average_dif_time = 0
             
         else:            
     
@@ -91,6 +88,8 @@ for date, date_df in ddr_by_flight_df.groupby(level='end_date'):
             ddr_median_add_time = int(np.median(add_times)) if add_times.any() else 0
 
 
+            ddr_total_dif_time = int(np.sum(hour_df['add_time']))
+            ddr_average_dif_time = int(ddr_total_dif_time/number_of_flights)
 
 
         ddr_by_hour_df = ddr_by_hour_df.append({'end_date':  date, 'end_hour': hour,
@@ -109,7 +108,8 @@ for date, date_df in ddr_by_flight_df.groupby(level='end_date'):
                                           'add_time_TMA_total': ddr_total_add_time,
                                           'add_time_TMA_mean': ddr_average_add_time,
                                           'add_time_TMA_median': ddr_median_add_time,
-                                          'add_time_TMA_min': ddr_min_add_time, 'add_time_TMA_max': ddr_max_add_time
+                                          'add_time_TMA_min': ddr_min_add_time, 'add_time_TMA_max': ddr_max_add_time,
+                                          'dif_time_TMA_mean': ddr_average_dif_time
                                           }, ignore_index=True)
     
     

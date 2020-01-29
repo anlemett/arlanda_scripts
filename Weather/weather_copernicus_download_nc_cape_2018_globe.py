@@ -1,3 +1,6 @@
+import time
+start_time = time.time()
+
 import cdsapi
 
 c = cdsapi.Client()
@@ -40,3 +43,5 @@ c.retrieve(
         'format': 'netcdf',
     },
     'data/weather_copernicus_TMA_grib_2018/copernicus_cape_2018_globe.nc')
+
+print((time.time()-start_time)/60)

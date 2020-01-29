@@ -32,14 +32,18 @@ print(year_metrics_kpis_df.head())
 
 def getWeatherScore(sum):
 
-    # sum: 0-4
+    # sum: 0-5
     
     return int(sum/0.2)
 
 
-year_metrics_kpis_df['weather_sum'] = year_metrics_kpis_df.apply(lambda row: row['ddr_number_of_flights'] + row['rsn'] + row['cape'] + row['i10fg'] + row['tcc'], axis=1)
+year_metrics_kpis_df['flights_rsn_cape_i10fg_tcc'] = year_metrics_kpis_df.apply(lambda row: row['ddr_number_of_flights'] + row['rsn'] + row['cape'] + row['i10fg'] + row['tcc'], axis=1)
+year_metrics_kpis_df['flights_rsn_cape_wind_tcc'] = year_metrics_kpis_df.apply(lambda row: row['ddr_number_of_flights'] + row['rsn'] + row['cape'] + row['wind'] + row['tcc'], axis=1)
+year_metrics_kpis_df['flights_rsn_cape_wind'] = year_metrics_kpis_df.apply(lambda row: row['ddr_number_of_flights'] + row['rsn'] + row['cape'] + row['wind'], axis=1)
 
-year_metrics_kpis_df['weather_score'] = year_metrics_kpis_df.apply(lambda row: getWeatherScore(row['weather_sum']), axis=1)
+year_metrics_kpis_df['weather_score'] = year_metrics_kpis_df.apply(lambda row: getWeatherScore(row['flights_rsn_cape_i10fg_tcc']), axis=1)
+year_metrics_kpis_df['weather_score2'] = year_metrics_kpis_df.apply(lambda row: getWeatherScore(row['flights_rsn_cape_wind_tcc']), axis=1)
+year_metrics_kpis_df['weather_3metrics_score'] = year_metrics_kpis_df.apply(lambda row: getWeatherScore(row['flights_rsn_cape_wind']), axis=1)
 
 
 year_metrics_kpis_df.to_csv("data/weather/copernicus_year_metrics_kpis_2018.csv", sep=' ', float_format='%.3f', encoding='utf-8')

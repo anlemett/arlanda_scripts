@@ -13,25 +13,22 @@ DATA_DIR = os.path.join("data", "statistics_ddr_" + year)
 
 filename = "statistics_ddr_by_flight_" + year + ".csv"
 
-ddr_by_flight_df = pd.read_csv(os.path.join(DATA_DIR, filename), sep=' ',
-                               names = ['endDate', 'endTime', 'flight_id', 'departure_delay', 'arrival_delay', 'enroute_delay', 'add_time'],
-                               index_col=[0],
-                               dtype={'flightId':int, 'endDate':str, 'endTime':str, 'departure_delay':int, 'arrival_delay':int, 'enroute_delay':int, 'add_time':int})
+ddr_by_flight_df = pd.read_csv(os.path.join(DATA_DIR, filename), sep=' ', index_col=[0])
 
-ddr_by_flight_df.set_index(['endDate'], inplace=True)
+ddr_by_flight_df.set_index(['end_date'], inplace=True)
 
-ddr_by_day_df = pd.DataFrame(columns=['endDate', 'number_of_flights',
+ddr_by_day_df = pd.DataFrame(columns=['end_date', 'number_of_flights',
                                       'arrival_delayed_15_min_flights_number',
                                       'enroute_delayed_15_min_flights_number',
                                       'total_departure_delay', 'average_departure_delay', 'total_arrival_delay', 'average_arrival_delay',
                                       'total_enroute_delay', 'average_enroute_delay',
-                                      'total_add_time_TMA', 'average_add_time_TMA'])
+                                      'total_add_time_TMA', 'average_add_time_TMA', 'average_dif_time_TMA'])
 
-days_num = len(ddr_by_flight_df.groupby(level='endDate'))
+days_num = len(ddr_by_flight_df.groupby(level='end_date'))
 print(days_num)
 
 count = 1
-for date, new_df in ddr_by_flight_df.groupby(level='endDate'):
+for date, new_df in ddr_by_flight_df.groupby(level='end_date'):
     print(count)
     count = count + 1
 
@@ -59,9 +56,12 @@ for date, new_df in ddr_by_flight_df.groupby(level='endDate'):
     add_times = new_df.loc[new_df.add_time > 0, 'add_time']
     ddr_total_add_times = int(np.sum(add_times)) if add_times.any() else 0
     ddr_average_add_time = int(ddr_total_add_times/number_of_flights) if add_times.any() else 0
+    
+    ddr_total_dif_times = int(np.sum(new_df['add_time']))
+    ddr_average_dif_time =  int(ddr_total_dif_times/number_of_flights)
 
 
-    ddr_by_day_df = ddr_by_day_df.append({'endDate':  date, 'number_of_flights': number_of_flights,
+    ddr_by_day_df = ddr_by_day_df.append({'end_date':  date, 'number_of_flights': number_of_flights,
                                           'arrival_delayed_15_min_flights_number': arrival_delayed_15_min,
                                           'enroute_delayed_15_min_flights_number': enroute_delayed_15_min,
                                           'total_departure_delay': ddr_total_departure_delay,
@@ -71,7 +71,9 @@ for date, new_df in ddr_by_flight_df.groupby(level='endDate'):
                                           'total_enroute_delay': ddr_total_enroute_delay,
                                           'average_enroute_delay': ddr_average_enroute_delay,
                                           'total_add_time_TMA': ddr_total_add_times,
-                                          'average_add_time_TMA': ddr_average_add_time}, ignore_index=True)
+                                          'average_add_time_TMA': ddr_average_add_time,
+                                          'average_dif_time_TMA': ddr_average_dif_time
+                                          }, ignore_index=True)
     
     
 filename = "statistics_ddr_by_day_" + year + ".csv"
