@@ -40,7 +40,7 @@ def create_merged_week_csv(month, week):
     new_opensky_df.set_index(['flightId', 'sequence'], inplace=True)
         
         
-    filename = 'tracks_opensky_merged_with_ddr_m3_' + year + '_' +month + '_' + str(week) + '.csv' 
+    filename = 'tracks_opensky_merged_with_ddr_m3_' + year + '_' +month + '_week' + str(week) + '.csv' 
 
     new_opensky_df.to_csv(os.path.join(OUTPUT_DIR, filename), sep=' ', encoding='utf-8', header=None)
 
@@ -51,14 +51,25 @@ ddr_df = pd.read_csv(ddr_m3_filename, sep=' ',
                         names=['flightId', 'sequence', 'segmentId', 'origin', 'destination', 'aircraftType', 'beginTime', 'endTime',
                         'beginAltitude', 'endAltitude', 'status', 'callsign', 'beginDate', 'endDate', 'beginLat', 'beginLon',
                         'endLat', 'endLon', 'segmentLength', 'segmentParityColor', 'beginTimestamp', 'endTimestamp'],
+                        index_col=[0,1],
                         dtype=str
                         )
-ddr_flight_begin_df = ddr_df[ddr_df['sequence'] == "1"]
-ddr_flight_begin_df.reset_index(drop=True, inplace=True)
+
+ddr_flight_end_df = pd.DataFrame()
+print("ddr_flight_end_df")
+for flight_id, flight_id_group in ddr_df.groupby(level='flightId'):
+     ddr_flight_end_df = ddr_flight_end_df.append(flight_id_group.tail(1))
+    
+ddr_flight_end_df.reset_index(drop=False, inplace=True)
+
+print(ddr_flight_end_df.head())
+
 ddr_df = pd.DataFrame()
 
+print("ddr_flightId_df")
 #'origin' field values are provided by Opensky API but not for all aircraft, so we substitute them by ddr data
-ddr_flightId_df = ddr_flight_begin_df[['callsign', 'endDate', 'flightId', 'aircraftType', 'origin']].copy()
+ddr_flightId_df = ddr_flight_end_df[['callsign', 'endDate', 'flightId', 'aircraftType', 'origin']].copy()
+ddr_flightId_df.to_csv(os.path.join(OUTPUT_DIR, "ddr_flightId.csv"), sep=' ', encoding='utf-8', header=True)
 
 
 from multiprocessing import Process
@@ -66,6 +77,7 @@ from multiprocessing import Process
 months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 
 for month in months:
+    print("month", month)
 
     #number_of_weeks = 5
     #if month == '02' and not calendar.isleap(int(year)):

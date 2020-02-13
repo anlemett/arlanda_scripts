@@ -5,9 +5,8 @@ ddr_stat_df = pd.read_csv("data/statistics_ddr_2018/statistics_ddr_by_hour_norm_
 
 opensky_stat_df = pd.read_csv("data/statistics_opensky_2018/statistics_opensky_by_hour_norm_2018.csv", sep=' ')
 
-year_ddr_stat_df = ddr_stat_df.loc[:, ('arrival_delay_mean', 'enroute_delay_mean', 'add_time_TMA_mean',
-                                       'arrival_delay_median', 'enroute_delay_median', 'add_time_TMA_median',
-                                       'number_of_flights')]
+year_ddr_stat_df = ddr_stat_df.loc[:, ('number_of_flights', 'add_time_TMA_mean', 'add_time_TMA_median', 'dif_time_TMA_mean')]
+
 year_ddr_stat_df.rename(columns={'number_of_flights': 'ddr_number_of_flights'}, inplace=True)
 
 year_opensky_stat_df = opensky_stat_df.loc[:, ('date', 'hour', 'average_time_on_levels', 'number_of_flights')]

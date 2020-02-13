@@ -24,7 +24,7 @@ ddr_by_hour_df = pd.DataFrame(columns=['end_date', 'end_hour', 'number_of_flight
                                       'arrival_delay_total', 'arrival_delay_mean', 'arrival_delay_median',
                                       'enroute_delay_total', 'enroute_delay_mean', 'enroute_delay_median',
                                       'add_time_TMA_total', 'add_time_TMA_mean', 'add_time_TMA_median',                               
-                                      'add_time_TMA_min', 'add_time_TMA_max', 'dif_time_mean'])
+                                      'add_time_TMA_min', 'add_time_TMA_max', 'dif_time_TMA_mean'])
 
 days_num = len(ddr_by_flight_df.groupby(level='end_date'))
 print(days_num)
@@ -115,6 +115,7 @@ for date, date_df in ddr_by_flight_df.groupby(level='end_date'):
     
 filename = "statistics_ddr_by_hour_" + year + ".csv"
 
+print(ddr_by_hour_df.head())
 
 #end_date end_hour number_of_flights arrival_delayed_15_min_flights_number enroute_delayed_15_min_flights_number total_departure_delay average_departure_delay total_arrival_delay average_arrival_delay total_enroute_delay average_enroute_delay total_add_time_TMA average_add_time_TMA min_add_time_TMA max_add_time_TMA
 ddr_by_hour_df.to_csv(os.path.join(DATA_DIR, filename), sep=' ', encoding='utf-8', float_format='%.3f', header=True, index=True)
