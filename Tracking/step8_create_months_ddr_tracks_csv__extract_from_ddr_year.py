@@ -89,7 +89,7 @@ for month in months:
     else:
         DATE_TIME_END = datetime(int(year), int(month) + 1, 1, 0, 0, 0, 0, timezone.utc)
 
-    #get_ddr_month(DATE_TIME_BEGIN, DATE_TIME_END, True)
+    get_ddr_month(DATE_TIME_BEGIN, DATE_TIME_END, True)
     get_ddr_month(DATE_TIME_BEGIN, DATE_TIME_END, False)
 
 print((time.time()-start_time)/60)

@@ -1,6 +1,6 @@
 import os
 
-year = '2018'
+year = '2020'
 
 OUTPUT_DIR = os.path.join("data", "tracks_opensky_downloaded_" + year)
 
@@ -143,7 +143,8 @@ start_time = time.time()
 
 from multiprocessing import Process
 
-months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+#months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+months = ['03', '04', '05']
 
 for month in months:
     

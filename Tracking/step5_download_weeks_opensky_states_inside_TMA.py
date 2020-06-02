@@ -179,7 +179,8 @@ start_time = time.time()
 
 from multiprocessing import Process
 
-months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+#months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+months = ['05', '06', '07', '08', '09', '10', '11', '12']
 
 for month in months:
 
