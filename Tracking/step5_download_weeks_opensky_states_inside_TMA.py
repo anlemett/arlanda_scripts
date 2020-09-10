@@ -56,13 +56,21 @@ def get_df(impala_log, time_end):
 
 #Set in this function which fields to extract (in sql request)
 def request_states(icao24, time_begin, time_end):
-    time_begin_datetime = datetime.fromtimestamp(time_begin)
-    hour_datetime = time_begin_datetime.replace(microsecond=0,second=0,minute=0)
-    hour = int(datetime.timestamp(hour_datetime))
+
+    time_begin_datetime = datetime.utcfromtimestamp(time_begin)
+    time_begin_datetime = time_begin_datetime.replace(tzinfo=pytz.timezone('UTC'))
+    hour_begin_datetime = time_begin_datetime.replace(microsecond=0,second=0,minute=0)
+    hour_begin_timestamp = int(datetime.timestamp(hour_begin_datetime))
+    
+    time_end_datetime = datetime.utcfromtimestamp(time_end)
+    time_end_datetime = time_end_datetime.replace(tzinfo=pytz.timezone('UTC'))
+    hour_end_datetime = time_end_datetime.replace(microsecond=0,second=0,minute=0)
+    hour_end_timestamp = int(datetime.timestamp(hour_end_datetime))
 
     time_begin_str = str(time_begin)
     time_end_str = str(time_end)
-    hour_str = str(hour)
+    hour_begin_str = str(hour_begin_timestamp)
+    hour_end_str = str(hour_end_timestamp)
 
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -93,7 +101,7 @@ def request_states(icao24, time_begin, time_end):
         b = shell.recv(256)
         total += b.decode()
 
-    request = "select time, lat, lon, baroaltitude, velocity from state_vectors_data4 where icao24=\'" + icao24 + "\' and time>=" + time_begin_str + " and time<=" + time_end_str + " and hour=" + hour_str +";\n"
+    request = "select time, lat, lon, baroaltitude, velocity from state_vectors_data4 where icao24=\'" + icao24 + "\' and time>=" + time_begin_str + " and time<=" + time_end_str + " and hour>=" + hour_begin_str + " and hour<=" + hour_end_str + ";\n"
     #print(request)
     shell.send(request)
     total = ""
